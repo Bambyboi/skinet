@@ -17,6 +17,9 @@
                 "build": {
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
+                        "allowedCommonJsDependencies": [
+                            "cuid"
+                        ],
                         "outputPath": "dist/client",
                         "index": "src/index.html",
                         "main": "src/main.ts",
@@ -38,6 +41,7 @@
                             "node_modules/font-awesome/css/font-awesome.min.css",
                             "node_modules/ngx-toastr/toastr.css",
                             "src/styles.scss"
+                            
                         ],
                         "scripts": []
                     },
