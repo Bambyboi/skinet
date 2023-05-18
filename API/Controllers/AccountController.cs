@@ -150,11 +150,16 @@ namespace API.Controllers
                 user.Address = new Address();
                 user.Address.AppUserId = user.Id;
             }
-
+            //this can also let the users edit their indentity
             // Update properties of the existing address
             user.Address.Street = addressDto.Street;
             user.Address.City = addressDto.City;
             //... do this for all properties of the AddressDto
+            user.Address.FirstName = addressDto.FirstName;
+            user.Address.LastName = addressDto.LastName;
+            user.Address.State = addressDto.State;
+            user.Address.Zipcode = addressDto.Zipcode;
+            
 
             var result = await _userManager.UpdateAsync(user);
 
