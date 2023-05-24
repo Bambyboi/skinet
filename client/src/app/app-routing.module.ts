@@ -5,6 +5,7 @@ import { NotFoundComponent } from './core/not-found/not-found.component';
 import { ServerErrorComponent } from './core/server-error/server-error.component';
 import { TestErrorComponent } from './core/test-error/test-error.component';
 import { HomeComponent } from './home/home.component';
+import { AuthGuard } from './core/guards/auth.guard';
 
 
 
@@ -15,7 +16,11 @@ const routes: Routes = [
   {path: 'server-error', component: ServerErrorComponent},
   {path: 'shop', loadChildren: () => import('./shop/shop.module').then(m => m.ShopModule)}, //lazyload
   {path: 'basket', loadChildren: () => import('./basket/basket.module').then(m => m.BasketModule)}, //lazyload
-  {path: 'checkout', loadChildren: () => import('./checkout/checkout.module').then(m => m.CheckoutModule)}, //lazyload
+  { //the AuthGuard can be use to secure the client that proceed a product without logging in
+    path: 'checkout', 
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./checkout/checkout.module').then(m => m.CheckoutModule)}, //lazyload
+  {path: 'account', loadChildren: () => import('./account/account.module').then(m => m.AccountModule)}, //lazyload
   {path: '**', redirectTo: '', pathMatch: 'full'},
 ];
 

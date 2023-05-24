@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AccountService } from 'src/app/account/account.service';
 import { BasketService } from 'src/app/basket/basket.service';
 import { BasketItem } from 'src/app/shared/models/basket';
 
@@ -8,7 +9,7 @@ import { BasketItem } from 'src/app/shared/models/basket';
   styleUrls: ['./nav-bar.component.scss']
 })
 export class NavBarComponent {
-  constructor(public basketService: BasketService){}
+  constructor(public basketService: BasketService, public accountService: AccountService){}
   
   //this could to add the same item to as an count in cart icon. eg. if a person chose two hats the total of that two item will count
   getCount(items: BasketItem[]){
