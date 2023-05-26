@@ -6,7 +6,7 @@ namespace Core.Entities.OrderAggregate
         {
         }
 
-        public ProductItemOrdered(int productItemId, int productName, int pictureUrl)
+        public ProductItemOrdered(int productItemId, string productName, string pictureUrl)
         {
             ProductItemId = productItemId;
             ProductName = productName;
@@ -14,7 +14,7 @@ namespace Core.Entities.OrderAggregate
         }
 
         public int ProductItemId { get; set; }
-        public int ProductName { get; set; }
-        public int PictureUrl { get; set; }
+        public string ProductName { get; set; }
+        public string PictureUrl { get; set; }
     }
 }

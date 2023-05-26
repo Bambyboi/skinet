@@ -38,7 +38,9 @@ namespace Infrastructure.Data
                 var deliveryData = File.ReadAllText(path + @"/Data/SeedData/delivery.json");
                 var methods = JsonSerializer.Deserialize<List<DeliveryMethod>>(deliveryData);
                 context.DeliveryMethods.AddRange(methods);
+                
             }
+
 
             if (context.ChangeTracker.HasChanges()) await context.SaveChangesAsync();
         }
