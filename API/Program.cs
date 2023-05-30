@@ -27,13 +27,13 @@ app.UseStatusCodePagesWithReExecute("/errors/{0}");
 app.UseSwaggerDocumentation();
 
 app.UseStaticFiles();
-app.UseStaticFiles(new StaticFileOptions
+/*app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(
         Path.Combine(Directory.GetCurrentDirectory(), "Content")), RequestPath = "/Content"
-});
+});*/
 
-app.UseCors("CorsPolicy");
+/*app.UseCors("CorsPolicy");*/
 //error cors policy
 app.UseCors(options => options.AllowAnyOrigin());
 
@@ -41,7 +41,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapFallbackToController("Index", "Fallback");
+//app.MapFallbackToController("Index", "Fallback");
 
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
