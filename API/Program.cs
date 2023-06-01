@@ -33,7 +33,8 @@ app.UseStaticFiles();
         Path.Combine(Directory.GetCurrentDirectory(), "Content")), RequestPath = "/Content"
 });*/
 
-/*app.UseCors("CorsPolicy");*/
+//remember to comment this one after section 19
+app.UseCors("CorsPolicy");
 //error cors policy
 app.UseCors(options => options.AllowAnyOrigin());
 

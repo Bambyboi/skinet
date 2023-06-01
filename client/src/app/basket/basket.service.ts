@@ -5,6 +5,7 @@ import { Basket, BasketItem, BasketTotals } from '../shared/models/basket';
 import { HttpClient } from '@angular/common/http';
 import { Product } from '../shared/models/product';
 import { ReturnStatement } from '@angular/compiler';
+import { DeliveryMethod } from '../shared/models/deliveryMethod';
 
 @Injectable({
   providedIn: 'root'
@@ -17,10 +18,15 @@ export class BasketService {
   //another observable
   private basketTotalSource = new BehaviorSubject<BasketTotals | null>(null);
   basketTotalSource$ = this.basketTotalSource.asObservable();
-
+  shipping =0;
 
   //this constuctor will use for a http request to our application
   constructor(private http: HttpClient) { }
+
+  setShippingPrice(deliveryMethod: DeliveryMethod){
+    this.shipping = deliveryMethod.price;
+    this.calculateTotals();
+  }
 
   //this could use to get the link of our basket
   getBasket(id: string){
@@ -68,12 +74,16 @@ export class BasketService {
     //this could allow the http to delete the id item on our application
     return this.http.delete(this.baseUrl + 'basket?id=' + basket.id).subscribe({
       next: () => {
-        this.basketSource.next(null),
-        this.basketTotalSource.next(null);
-        //this could delete the item from the localstorage on the internet
-        localStorage.removeItem('basket_id');
+        this.deleteLocalBasket();
       }
     });
+  }
+
+  deleteLocalBasket(){
+    this.basketSource.next(null),
+    this.basketTotalSource.next(null);
+    //this could delete the item from the localstorage on the internet
+    localStorage.removeItem('basket_id');
   }
 
   addOrUpdateItem(items: BasketItem[], itemToAdd: BasketItem, quantity: number): BasketItem[] {
@@ -111,11 +121,10 @@ export class BasketService {
   private calculateTotals (){
     const basket = this.getCurrentBasketValue();
     if (!basket) return;
-    const shipping = 0;
     //reduce fuction is for calculating array, like price and quantity and add them together in a parameter
     const subtotal = basket.items.reduce((a, b) => (b.price * b.quantity) + a, 0);
-    const total = subtotal + shipping;
-    this.basketTotalSource.next({shipping, total, subtotal});
+    const total = subtotal + this.shipping;
+    this.basketTotalSource.next({shipping : this.shipping, total, subtotal});
   }
 
   private isProduct(item: Product | BasketItem) : item is Product{
