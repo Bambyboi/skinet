@@ -19,7 +19,13 @@ const routes: Routes = [
   { //the AuthGuard can be use to secure the client that proceed a product without logging in
     path: 'checkout', 
     canActivate: [AuthGuard],
-    loadChildren: () => import('./checkout/checkout.module').then(m => m.CheckoutModule)}, //lazyload
+    loadChildren: () => import('./checkout/checkout.module').then(m => m.CheckoutModule)
+  }, //lazyload
+  {
+    path: 'orders', 
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./orders/orders.module').then(m => m.OrdersModule)
+  },
   {path: 'account', loadChildren: () => import('./account/account.module').then(m => m.AccountModule)}, //lazyload
   {path: '**', redirectTo: '', pathMatch: 'full'},
 ];
