@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Basket, BasketItem, BasketTotals } from '../shared/models/basket';
 import { HttpClient } from '@angular/common/http';
@@ -22,17 +22,42 @@ export class BasketService {
 
   //this constuctor will use for a http request to our application
   constructor(private http: HttpClient) { }
-
-  setShippingPrice(deliveryMethod: DeliveryMethod){
-    this.shipping = deliveryMethod.price;
-    this.calculateTotals();
+ 
+  //createPaymentIntent method is responsible for sending an HTTP POST request to create 
+  //a payment intent and handling the response. It updates the current basket with the response, 
+  //emits the updated basket to subscribers, and logs the basket object to the console for debugging purposes.
+  createPaymentIntent(){
+    return this.http.post<Basket>(this.baseUrl + 'payments/' + this.getCurrentBasketValue()?.id, {})
+    .pipe(
+      map(basket => {
+        this.basketSource.next(basket);
+      })
+    )
   }
+ 
+  //The method takes a parameter deliveryMethod of type DeliveryMethod, which likely represents a specific delivery method selected by the user.
+  setShippingPrice(deliveryMethod: DeliveryMethod){
+    //The code checks if the basket object (retrieved earlier) is not null or undefined.
+    const basket = this.getCurrentBasketValue();
+  
+    //If the basket exists, it sets the deliveryMethodId property of the basket to the id of the selected deliveryMethod. 
+    //This associates the chosen delivery method with the basket.
+    if (basket)
+    {
+      basket.shippingPrice = deliveryMethod.price;
+      basket.deliveryMethodId = deliveryMethod.id;
+      this.setBasket(basket);
+    }
+  }
+
 
   //this could use to get the link of our basket
   getBasket(id: string){
     return this.http.get<Basket>(this.baseUrl + 'basket?id=' + id).subscribe({
       next: basket => {
         this.basketSource.next(basket);
+          //This method is likely responsible for recalculating the totals of the basket, taking into account the updated 
+          //delivery method and potentially other factors.
         this.calculateTotals();
       }
     })
@@ -123,8 +148,8 @@ export class BasketService {
     if (!basket) return;
     //reduce fuction is for calculating array, like price and quantity and add them together in a parameter
     const subtotal = basket.items.reduce((a, b) => (b.price * b.quantity) + a, 0);
-    const total = subtotal + this.shipping;
-    this.basketTotalSource.next({shipping : this.shipping, total, subtotal});
+    const total = subtotal + basket.shippingPrice;
+    this.basketTotalSource.next({shipping : basket.shippingPrice, total, subtotal});
   }
 
   private isProduct(item: Product | BasketItem) : item is Product{

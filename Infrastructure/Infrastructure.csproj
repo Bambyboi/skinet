@@ -6,6 +6,7 @@
     <PackageReference Include="StackExchange.Redis" Version="2.6.104" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.25.1" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.1" />
+    <PackageReference Include="Stripe.net" Version="41.19.0" />
   </ItemGroup>
 
   <ItemGroup>

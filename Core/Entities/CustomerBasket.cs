@@ -13,5 +13,13 @@ namespace Core.Entities
 
         public string Id { get; set; }
         public List<BasketItem> Items { get; set; } = new List<BasketItem>();
+        public int? DeliveryMethodId { get; set; }
+        public string ClientSecret { get; set; }
+        //PaymentIntentId is use to let client to update they order information instead of creating a new order information 
+        public string PaymentIntentId { get; set; }
+
+        public decimal ShippingPrice { get; set; }
+
+        
     }
 }
